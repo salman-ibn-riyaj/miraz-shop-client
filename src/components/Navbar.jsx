@@ -214,16 +214,16 @@ export default function Navbar() {
           )}
 
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="hidden sm:inline-block">
-            <Button
-              as={NextLink}
+            <Link
+              className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/20 active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
               href="/signin"
               variant="flat"
               color="default"
               startcontent={<FiLogIn className="h-4 w-4" />}
-              className="font-medium"
+              
             >
               Sign In
-            </Button>
+            </Link>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
