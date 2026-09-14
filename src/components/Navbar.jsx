@@ -22,12 +22,69 @@ import {
   FiLogIn,
   FiUserPlus,
   FiGrid,
+  FiPackage,
+  FiSmile,
+  FiGift,
 } from "react-icons/fi";
 import Link from "next/link";
 
+// Single Source of Truth for Navigation Links
+const navItems = [
+  {
+    key: "home",
+    label: "Home",
+    href: "/",
+    icon: FiHome,
+    type: "link",
+  },
+  {
+    key: "electronics-gadgets",
+    label: "Electronics & Gadgets",
+    icon: FiGrid,
+    type: "dropdown",
+    children: [
+      {
+        key: "mens-watches",
+        title: "Men's Watches",
+        description: "Luxury chronographs & smartwatches",
+        href: "/electronicsandgadgets/watches/menswatch",
+        icon: FiWatch,
+      },
+      {
+        key: "womens-watches",
+        title: "Women's Watches",
+        description: "Elegant timepieces & luxury bands",
+        href: "/electronicsandgadgets/watches/womenswatch",
+        icon: FiHeart,
+      },
+    ],
+  },
+  {
+    key: "3-pcs",
+    label: "3 PCs",
+    href: "/3-pcs",
+    icon: FiPackage,
+    type: "link",
+  },
+  {
+    key: "beauty-health",
+    label: "Beauty & Health",
+    href: "/beauty-health",
+    icon: FiSmile,
+    type: "link",
+  },
+  {
+    key: "add Products",
+    label: "Add Products",
+    href: "/add-product",
+    icon: FiGift,
+    type: "link",
+  },
+];
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMobileWatchOpen, setIsMobileWatchOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState({});
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -37,22 +94,12 @@ export default function Navbar() {
     setMounted(true);
   }, []);
 
-  const watchCategories = [
-    {
-      key: "mens-watches",
-      title: "Men's Watches",
-      description: "Luxury chronographs & smartwatches",
-      href: "/electronicsandgadgets/watches/menswatch",
-      icon: FiWatch,
-    },
-    {
-      key: "womens-watches",
-      title: "Women's Watches",
-      description: "Elegant timepieces & luxury bands",
-      href: "/electronicsandgadgets/watches/womenswatch",
-      icon: FiHeart,
-    },
-  ];
+  const toggleMobileDropdown = (key) => {
+    setOpenMobileDropdown((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   return (
     <motion.nav
@@ -95,89 +142,83 @@ export default function Navbar() {
 
         {/* Center Section: Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          <NextLink
-            href="/"
-            className="text-sm font-semibold text-foreground hover:text-primary transition-colors flex items-center gap-1.5"
-          >
-            <FiHome className="h-4 w-4 text-default-500" />
-            <span>Home</span>
-          </NextLink>
-
-          {/* Electronics & Gadgets Dropdown - Only Watches */}
-          <Dropdown isOpen={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-            <Dropdown.Trigger>
-              <div
-                ref={triggerRef}
-                className="flex items-center gap-1.5 text-sm font-semibold text-foreground hover:text-primary transition-colors cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-default-100"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    setIsDropdownOpen(!isDropdownOpen);
-                  }
-                }}
-                role="button"
-                tabIndex={0}
-              >
-                <span>Electronics & Gadgets</span>
-                <motion.div
-                  animate={{ rotate: isDropdownOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <FiChevronDown className="h-4 w-4" />
-                </motion.div>
-              </div>
-            </Dropdown.Trigger>
-
-            <Dropdown.Popover>
-              <Dropdown.Menu
-                aria-label="Electronics & Gadgets Menu"
-                className="w-[340px]"
-              >
-                {/* Timepieces Section */}
-                <Dropdown.Section>
-                  <Header className="px-2 py-1.5 text-xs font-semibold text-default-400 uppercase tracking-wider">
-                    Watches & Timepieces
-                  </Header>
-                  {watchCategories.map((item) => (
-                    <Dropdown.Item
-                      key={item.key}
-                      as={NextLink}
-                      href={item.href}
-                      className="py-2.5 px-3 rounded-xl transition-all hover:bg-content2"
+          {navItems.map((item) => {
+            if (item.type === "dropdown") {
+              return (
+                <Dropdown key={item.key} isOpen={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+                  <Dropdown.Trigger>
+                    <div
+                      ref={triggerRef}
+                      className="flex items-center gap-1.5 text-sm font-semibold text-foreground hover:text-primary transition-colors cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-default-100"
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          setIsDropdownOpen(!isDropdownOpen);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
                     >
-                      <div className="flex items-center gap-3 w-full">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                          <item.icon className="h-4 w-4" />
-                        </div>
-                        <div className="flex flex-col gap-0.5">
-                          <Label className="text-sm font-bold text-foreground cursor-pointer">
-                            {item.title}
-                          </Label>
-                          <Description className="text-xs text-default-400 font-normal">
-                            {item.description}
-                          </Description>
-                        </div>
-                      </div>
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Section>
-              </Dropdown.Menu>
-            </Dropdown.Popover>
-          </Dropdown>
+                      <span>{item.label}</span>
+                      <motion.div
+                        animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <FiChevronDown className="h-4 w-4" />
+                      </motion.div>
+                    </div>
+                  </Dropdown.Trigger>
 
-          <NextLink
-            href="/3-pcs"
-            className="text-sm font-semibold text-foreground hover:text-primary transition-colors"
-          >
-            3 PCs
-          </NextLink>
+                  <Dropdown.Popover>
+                    <Dropdown.Menu
+                      aria-label={`${item.label} Menu`}
+                      className="w-[340px]"
+                    >
+                      <Dropdown.Section>
+                        <Header className="px-2 py-1.5 text-xs font-semibold text-default-400 uppercase tracking-wider">
+                          Watches & Timepieces
+                        </Header>
+                        {item.children?.map((child) => (
+                          <Dropdown.Item
+                            key={child.key}
+                            as={NextLink}
+                            href={child.href}
+                            className="py-2.5 px-3 rounded-xl transition-all hover:bg-content2"
+                          >
+                            <div className="flex items-center gap-3 w-full">
+                              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                <child.icon className="h-4 w-4" />
+                              </div>
+                              <div className="flex flex-col gap-0.5">
+                                <Label className="text-sm font-bold text-foreground cursor-pointer">
+                                  {child.title}
+                                </Label>
+                                <Description className="text-xs text-default-400 font-normal">
+                                  {child.description}
+                                </Description>
+                              </div>
+                            </div>
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Section>
+                    </Dropdown.Menu>
+                  </Dropdown.Popover>
+                </Dropdown>
+              );
+            }
 
-          <NextLink
-            href="/beauty-health"
-            className="text-sm font-semibold text-foreground hover:text-primary transition-colors"
-          >
-            Beauty & Health
-          </NextLink>
+            const Icon = item.icon;
+            return (
+              <NextLink
+                key={item.key}
+                href={item.href}
+                className="text-sm font-semibold text-foreground hover:text-primary transition-colors flex items-center gap-1.5"
+              >
+                {Icon && <Icon className="h-4 w-4 text-default-500" />}
+                <span>{item.label}</span>
+              </NextLink>
+            );
+          })}
         </div>
 
         {/* Right Section: Actions & Dark Mode */}
@@ -220,7 +261,6 @@ export default function Navbar() {
               variant="flat"
               color="default"
               startcontent={<FiLogIn className="h-4 w-4" />}
-              
             >
               Sign In
             </Link>
@@ -249,73 +289,59 @@ export default function Navbar() {
             className="border-t border-default-200 md:hidden bg-background overflow-hidden"
           >
             <div className="p-4 flex flex-col gap-3">
-              <NextLink
-                href="/"
-                className="flex items-center gap-3 py-2 text-base font-medium text-foreground hover:text-primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <FiHome className="h-5 w-5 text-primary" />
-                <span>Home</span>
-              </NextLink>
-
-              {/* Mobile Collapsible Dropdown */}
-              <div className="flex flex-col gap-1">
-                <button
-                  onClick={() => setIsMobileWatchOpen(!isMobileWatchOpen)}
-                  className="flex items-center justify-between w-full py-2 text-base font-medium text-foreground hover:text-primary"
-                >
-                  <div className="flex items-center gap-3">
-                    <FiGrid className="h-5 w-5 text-primary" />
-                    <span>Electronics & Gadgets</span>
-                  </div>
-                  <motion.div
-                    animate={{ rotate: isMobileWatchOpen ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <FiChevronDown className="h-4 w-4" />
-                  </motion.div>
-                </button>
-
-                {isMobileWatchOpen && (
-                  <div className="pl-8 flex flex-col gap-2 pt-1 pb-2 border-l-2 border-primary/20 ml-2">
-                    {watchCategories.map((w) => (
-                      <NextLink
-                        key={w.key}
-                        href={w.href}
-                        className="text-sm font-medium text-default-600 hover:text-primary flex items-center gap-2 py-1"
-                        onClick={() => setIsMenuOpen(false)}
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                if (item.type === "dropdown") {
+                  const isOpen = !!openMobileDropdown[item.key];
+                  return (
+                    <div key={item.key} className="flex flex-col gap-1">
+                      <button
+                        onClick={() => toggleMobileDropdown(item.key)}
+                        className="flex items-center justify-between w-full py-2 text-base font-medium text-foreground hover:text-primary"
                       >
-                        <w.icon className="h-4 w-4 text-primary" />
-                        <span>{w.title}</span>
-                      </NextLink>
-                    ))}
-                  </div>
-                )}
-              </div>
+                        <div className="flex items-center gap-3">
+                          {Icon && <Icon className="h-5 w-5 text-primary" />}
+                          <span>{item.label}</span>
+                        </div>
+                        <motion.div
+                          animate={{ rotate: isOpen ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <FiChevronDown className="h-4 w-4" />
+                        </motion.div>
+                      </button>
 
-              <NextLink
-                href="/3-pcs"
-                className="flex items-center gap-3 py-2 text-base font-medium text-foreground hover:text-primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <span>3 PCs</span>
-              </NextLink>
+                      {isOpen && (
+                        <div className="pl-8 flex flex-col gap-2 pt-1 pb-2 border-l-2 border-primary/20 ml-2">
+                          {item.children?.map((child) => (
+                            <NextLink
+                              key={child.key}
+                              href={child.href}
+                              className="text-sm font-medium text-default-600 hover:text-primary flex items-center gap-2 py-1"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              <child.icon className="h-4 w-4 text-primary" />
+                              <span>{child.title}</span>
+                            </NextLink>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
 
-              <NextLink
-                href="/beauty-health"
-                className="flex items-center gap-3 py-2 text-base font-medium text-foreground hover:text-primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <span>Beauty & Health</span>
-              </NextLink>
-
-              <NextLink
-                href="/ornaments"
-                className="flex items-center gap-3 py-2 text-base font-medium text-foreground hover:text-primary"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <span>Ornaments</span>
-              </NextLink>
+                return (
+                  <NextLink
+                    key={item.key}
+                    href={item.href}
+                    className="flex items-center gap-3 py-2 text-base font-medium text-foreground hover:text-primary"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {Icon && <Icon className="h-5 w-5 text-primary" />}
+                    <span>{item.label}</span>
+                  </NextLink>
+                );
+              })}
 
               <div className="pt-3 border-t border-default-200">
                 <Button
@@ -324,7 +350,7 @@ export default function Navbar() {
                   variant="flat"
                   color="default"
                   fullWidth
-                  startContent={<FiLogIn className="h-5 w-5 text-current" />}
+                  startcontent={<FiLogIn className="h-5 w-5 text-current" />}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign In
