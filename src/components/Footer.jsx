@@ -23,7 +23,7 @@ export default function Footer() {
     {
       title: "Categories",
       links: [
-        { name: "Electronics & Gadgets", href: "/electronics" },
+        { name: "Electronics & Gadgets", href: "/electronicsandgadgets" },
         { name: "3 PCs", href: "/3-pcs" },
         { name: "Beauty & Health", href: "/beauty-health" },
         { name: "New Arrivals", href: "/new-arrivals" },
@@ -57,7 +57,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="w-full border-t border-default-200 bg-background text-foreground transition-colors duration-200">
+    <footer className="w-full mt-auto border-t border-default-200 bg-background text-foreground transition-colors duration-200">
       {/* Top Container */}
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
