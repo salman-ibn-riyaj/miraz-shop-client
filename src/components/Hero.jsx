@@ -14,6 +14,7 @@ import {
   FiCheckCircle,
   FiLayers,
 } from "react-icons/fi";
+import Link from "next/link";
 
 export default function Hero() {
   const categories = [
@@ -29,7 +30,7 @@ export default function Hero() {
       <div className="pointer-events-none absolute -bottom-24 left-0 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
+
         {/* Left Column: Heading & Call to Actions */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -86,31 +87,29 @@ export default function Hero() {
             className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
           >
             <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-              <Button
-                as={NextLink}
+              <Link
                 href="/3-pcs"
                 color="primary"
                 variant="solid"
                 size="lg"
-                startcontent={<FiShoppingBag className="h-5 w-5" />}
-                className="font-bold shadow-lg shadow-primary/25 px-8 w-full sm:w-auto"
+                startcontent={<FiShoppingBag className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110" />}
+                className="group relative overflow-hidden font-semibold tracking-wide px-8 py-3.5 w-full sm:w-auto rounded-xl bg-gradient-to-r from-primary via-indigo-600 to-primary bg-[length:200%_auto] text-white shadow-lg shadow-primary/30 transition-all duration-300 ease-out hover:bg-[position:right_center] hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-98"
               >
-                Explore Three PCs
-              </Button>
+                Explore Three-Piece
+              </Link>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-              <Button
-                as={NextLink}
+              <Link
                 href="/beauty-health"
                 variant="flat"
                 color="default"
                 size="lg"
-                startcontent={<FiHeart className="h-5 w-5" />}
-                className="font-bold border border-default-200 px-8 w-full sm:w-auto"
+                startcontent={<FiHeart className="h-5 w-5 text-rose-500 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6" />}
+                className="group relative font-semibold tracking-wide px-8 py-3.5 w-full sm:w-auto rounded-xl bg-background/60 backdrop-blur-md border border-default-200 hover:border-rose-200 dark:hover:border-rose-900 text-foreground hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-98"
               >
                 Beauty & Health
-              </Button>
+              </Link>
             </motion.div>
           </motion.div>
 
@@ -143,7 +142,7 @@ export default function Hero() {
         >
           {/* Card Showcase Container */}
           <div className="relative w-full max-w-md aspect-square rounded-3xl bg-gradient-to-tr from-primary/20 via-content2 to-content1 border border-default-200 p-6 flex flex-col justify-between shadow-2xl overflow-hidden group">
-            
+
             {/* Top Product Tag */}
             <div className="flex justify-between items-center z-10">
               <span className="text-xs font-bold tracking-wider text-default-400 uppercase">

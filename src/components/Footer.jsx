@@ -87,17 +87,17 @@ export default function Footer() {
               <div className="space-y-2 pt-2 text-xs text-default-400">
                 <div className="flex items-center gap-2">
                   <FiMapPin className="text-primary" />
-                  <span>Dhaka, Bangladesh</span>
+                  <span>Narayanganj, Bangladesh</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <FiPhone className="text-primary" />
-                  <span>+880 1700-000000</span>
+                  <span>+880 1575578198</span>
                 </div>
               </div>
             </div>
 
             {/* Newsletter Input */}
-            <div className="mt-6 space-y-2">
+            {/* <div className="mt-6 space-y-2">
               <span className="text-sm font-semibold text-foreground">
                 Subscribe to our newsletter
               </span>
@@ -123,7 +123,7 @@ export default function Footer() {
                   </Button>
                 </motion.div>
               </form>
-            </div>
+            </div> */}
           </div>
 
           {/* Navigation Links Columns */}
