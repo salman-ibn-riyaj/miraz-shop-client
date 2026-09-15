@@ -1,13 +1,74 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
 
 export default function MensWatchForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setSuccess(false);
+
+  //   const form = e.target;
+  //   const imageFile = form.image.files[0];
+
+  //   try {
+  //     // Step 1: ImgBB-তে ছবি আপলোড করা
+  //     const uploadFormData = new FormData();
+  //     uploadFormData.append("image", imageFile);
+
+  //     const uploadRes = await fetch("/api/upload", {
+  //       method: "POST",
+  //       body: uploadFormData,
+  //     });
+
+  //     const uploadData = await uploadRes.json();
+
+  //     if (!uploadRes.ok || !uploadData.url) {
+  //       alert("Image upload failed!");
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     // Step 2: ImgBB থেকে পাওয়া URL সহ প্রোডাক্ট ডাটা সাজানো
+  //     const productData = {
+  //       title: form.title.value,
+  //       price: Number(form.price.value),
+  //       brand: form.brand.value,
+  //       waterResistance: form.waterResistance.value,
+  //       strapMaterial: form.strapMaterial.value,
+  //       movementType: form.movementType.value,
+  //       imageUrl: uploadData.url, // <-- ImgBB Direct Image URL
+  //       description: form.description.value,
+  //     };
+
+  //     // Step 3: ডাটাবেসে সেভ করার API এ পাঠানো
+  //     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  //     const res = await fetch(`${baseUrl}/api/products/mens-watch`, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(productData),
+  //     });
+
+  //     if (res.ok) {
+  //       setSuccess(true);
+  //       form.reset();
+  //       router.push("/electronicsandgadgets/watches/menswatch");
+  //       router.refresh(); // সাফল্যের পর মেনস ওয়াচ পেজে রিডিরেক্ট
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSuccess(false);
@@ -33,7 +94,7 @@ export default function MensWatchForm() {
         return;
       }
 
-      // Step 2: ImgBB থেকে পাওয়া URL সহ প্রোডাক্ট ডাটা সাজানো
+      // Step 2: Product Data
       const productData = {
         title: form.title.value,
         price: Number(form.price.value),
@@ -41,11 +102,11 @@ export default function MensWatchForm() {
         waterResistance: form.waterResistance.value,
         strapMaterial: form.strapMaterial.value,
         movementType: form.movementType.value,
-        imageUrl: uploadData.url, // <-- ImgBB Direct Image URL
+        imageUrl: uploadData.url,
         description: form.description.value,
       };
 
-      // Step 3: ডাটাবেসে সেভ করার API এ পাঠানো
+      // Step 3: API Request
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const res = await fetch(`${baseUrl}/api/products/mens-watch`, {
         method: "POST",
@@ -56,13 +117,23 @@ export default function MensWatchForm() {
       if (res.ok) {
         setSuccess(true);
         form.reset();
+        
+        // Timeout দিয়ে রিডিরেক্ট নিশ্চায়ন
+        setTimeout(() => {
+          router.push("/electronicsandgadgets/watches/menswatch");
+          router.refresh();
+        }, 300);
+      } else {
+        alert("Server returned error response! Check Console.");
       }
     } catch (err) {
       console.error(err);
+      alert("Network Error!");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

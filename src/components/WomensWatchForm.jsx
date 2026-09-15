@@ -1,5 +1,6 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
 
@@ -58,6 +59,7 @@ export default function WomensWatchForm() {
             if (res.ok) {
                 setSuccess(true);
                 form.reset();
+                redirect("/electronicsandgadgets/watches/womenswatch"); // সাফল্যের পর উইমেন্স ওয়াচ পেজে রিডিরেক্ট
             }
         } catch (err) {
             console.error(err);

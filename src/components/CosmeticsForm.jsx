@@ -1,5 +1,6 @@
 "use client";
 
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
 
@@ -56,6 +57,7 @@ export default function CosmeticsForm() {
       if (res.ok) {
         setSuccess(true);
         form.reset();
+        redirect("/beauty-health"); // সাফল্যের পর বিউটি অ্যান্ড হেলথ পেজে রিডিরেক্ট
       }
     } catch (err) {
       console.error(err);

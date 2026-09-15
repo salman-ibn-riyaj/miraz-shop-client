@@ -56,6 +56,7 @@ export default function ThreePieceForm() {
       if (res.ok) {
         setSuccess(true);
         form.reset();
+        redirect("/3-pcs"); // সাফল্যের পর 3-Piece Collection পেজে রিডিরেক্ট
       }
     } catch (err) {
       console.error(err);

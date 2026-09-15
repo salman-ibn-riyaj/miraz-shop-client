@@ -11,6 +11,7 @@ async function getProductsByCollection(collectionName) {
 
     if (!res.ok) throw new Error("Failed to fetch");
     const data = await res.json();
+    console.log("Fetched Mens Watches Data:", data); // ডিবাগিং এর জন্য লগ
     return data?.data || [];
   } catch (error) {
     console.error("Error fetching data:", error);
