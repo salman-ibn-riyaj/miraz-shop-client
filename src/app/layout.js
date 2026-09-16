@@ -23,20 +23,24 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html
-
       data-theme="light"
       suppressHydrationWarning
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} light h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-background text-foreground">
+      <body className="bg-background text-foreground min-h-screen flex flex-col">
+        <Toaster position="top-center" reverseOrder={false} />
         <Providers>
           <Navbar />
           <main className="flex-grow">{children}</main>
           <Footer />
         </Providers>
-        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   );
 }
+
+
+
+
+
