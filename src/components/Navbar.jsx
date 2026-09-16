@@ -27,6 +27,7 @@ import {
   FiGift,
 } from "react-icons/fi";
 import Link from "next/link";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 // Single Source of Truth for Navigation Links
 const navItems = [
@@ -225,7 +226,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {mounted ? (
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              <Button
+              {/* <Button
                 isIconOnly
                 variant="flat"
                 color="default"
@@ -246,9 +247,11 @@ export default function Navbar() {
                     ) : (
                       <FiMoon className="h-5 w-5 text-default-600" />
                     )}
+                    
                   </motion.div>
                 </AnimatePresence>
-              </Button>
+              </Button> */}
+              <ThemeSwitch />
             </motion.div>
           ) : (
             <div className="h-10 w-10" />
