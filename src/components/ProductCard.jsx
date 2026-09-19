@@ -1,4 +1,3 @@
-// components/ProductCard.jsx
 import Link from "next/link";
 import React from "react";
 
@@ -6,7 +5,7 @@ const ProductCard = ({ product }) => {
     const { _id, title, price, imageUrl, brand } = product;
 
     return (
-        <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-300">
+        <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-slate-300">
             {/* Product Image */}
             <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-slate-100">
                 <img
@@ -24,9 +23,12 @@ const ProductCard = ({ product }) => {
 
             {/* Details */}
             <div className="mt-4 flex flex-1 flex-col justify-between">
-                <h3 className="line-clamp-2 text-base font-semibold text-slate-900 group-hover:text-slate-700">
-                    {title}
-                </h3>
+                {/* Title Container with fixed minimum height for 2 lines */}
+                <div className="flex h-12 items-start">
+                    <h3 className="line-clamp-2 text-base font-semibold text-slate-900 group-hover:text-slate-700">
+                        {title}
+                    </h3>
+                </div>
 
                 {/* Price & Action */}
                 <div className="mt-4 flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
