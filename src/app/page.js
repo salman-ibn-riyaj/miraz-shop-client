@@ -1,3 +1,4 @@
+import FeaturedCosmetics from "@/components/FeaturedCosmetics";
 import FeaturedMensWatch from "@/components/FeaturedMensWatch";
 import FeaturedThreePiece from "@/components/FeaturedThreePiece";
 import FeaturedWomensWatch from "@/components/FeaturedWomensWatch";
@@ -11,6 +12,7 @@ export default function Home() {
       <FeaturedMensWatch/>
       <FeaturedWomensWatch/>
       <FeaturedThreePiece/>
+      <FeaturedCosmetics/>
     </div>
   );
 }
