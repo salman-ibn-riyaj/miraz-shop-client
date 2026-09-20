@@ -64,7 +64,7 @@ export default function Hero() {
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight"
           >
             Elegance & Style Redefined at{" "}
-            <span className="text-primary bg-gradient-to-r from-primary to-amber-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-bold">
               Miraz Shop
             </span>
           </motion.h1>
