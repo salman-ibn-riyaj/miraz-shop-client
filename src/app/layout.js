@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Miraz Shop - Premium Lifestyle & Fashion Collection",
   description: "Premium lifestyle and fashion collection for the modern individual",
+  verification: {
+    google: "5ZPofhLKNM6TvMmVN0gBZm0unhsYaqDgLwkYinCJpck",
+  },
 };
 
 export default function RootLayout({ children }) {
