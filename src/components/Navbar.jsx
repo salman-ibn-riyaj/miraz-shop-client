@@ -58,6 +58,13 @@ const navItems = [
         href: "/electronicsandgadgets/watches/womenswatch",
         icon: FiHeart,
       },
+      {
+        key: "Kids-learnings",
+        title: "Kids Learnings",
+        description: "Educational toys & learning materials",
+        href: "/electronicsandgadgets/kids-learnings",
+        icon: FiGift,
+      },
     ],
   },
   {
