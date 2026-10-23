@@ -20,6 +20,14 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Meta Pixel
+
+Set `NEXT_PUBLIC_META_PIXEL_ID` to your Meta Pixel ID in `.env.local` for local
+development and in your deployment environment for production. The Pixel tracks
+`PageView` on initial load and client-side navigation, `ViewContent` on product
+pages, and `Purchase` after an order is successfully submitted. Purchase values
+use BDT and include the order total.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

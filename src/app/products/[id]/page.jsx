@@ -1,6 +1,7 @@
 // app/products/[id]/page.jsx
 import React from "react";
 import OrderForm from "@/components/OrderForm";
+import { MetaPixelEvent } from "@/components/MetaPixel";
 
 async function getSingleProduct(id) {
   try {
@@ -31,6 +32,16 @@ const ProductDetailsPage = async ({ params }) => {
 
   return (
     <main className="min-h-screen bg-slate-50 py-10 md:py-16">
+      <MetaPixelEvent
+        eventName="ViewContent"
+        payload={{
+          content_ids: [String(product._id)],
+          content_name: product.title,
+          content_type: "product",
+          currency: "BDT",
+          value: Number(product.price),
+        }}
+      />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* Left Column: Product Info & Image */}

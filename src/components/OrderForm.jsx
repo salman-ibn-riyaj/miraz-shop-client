@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { trackMetaPixelEvent } from "@/lib/meta-pixel";
 
 const OrderForm = ({ product }) => {
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,14 @@ const OrderForm = ({ product }) => {
       });
 
       if (response.ok) {
+        trackMetaPixelEvent("Purchase", {
+          content_ids: [String(product._id)],
+          content_name: product.title,
+          content_type: "product",
+          currency: "BDT",
+          num_items: quantity,
+          value: grandTotal,
+        });
         setSubmitted(true);
         form.reset();
         toast.success("Order submitted successfully!", {
