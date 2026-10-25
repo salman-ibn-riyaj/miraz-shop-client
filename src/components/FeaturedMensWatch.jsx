@@ -94,7 +94,7 @@ export default function FeaturedMensWatch() {
 
         {/* Loading Skeleton */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
@@ -111,7 +111,7 @@ export default function FeaturedMensWatch() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
           >
             {products.map((product) => (
               <motion.div key={product._id || product.id} variants={itemVariants} className="h-full">

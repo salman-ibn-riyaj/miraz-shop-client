@@ -12,7 +12,7 @@ export default function Home() {
       <FeaturedMensWatch/>
       <FeaturedWomensWatch/>
       <FeaturedThreePiece/>
-      <FeaturedCosmetics/>
+      {/* <FeaturedCosmetics/> */}
     </div>
   );
 }

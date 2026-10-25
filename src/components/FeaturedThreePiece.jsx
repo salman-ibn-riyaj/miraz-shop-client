@@ -14,14 +14,14 @@ export default function FeaturedThreePiece() {
     const fetchFeatured = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || ""}/api/featured-three-piece`
+          `${process.env.NEXT_PUBLIC_API_URL || ""}/api/featured-trimmer`
         );
         const result = await res.json();
         if (result.success && Array.isArray(result.data)) {
           setProducts(result.data);
         }
       } catch (error) {
-        console.error("Failed to fetch featured three-piece collection:", error);
+        console.error("Failed to fetch featured trimmer collection:", error);
       } finally {
         setLoading(false);
       }
@@ -68,7 +68,7 @@ export default function FeaturedThreePiece() {
               transition={{ duration: 0.5 }}
               className="text-xs uppercase tracking-[0.25em] font-semibold text-amber-600 dark:text-amber-400 mb-2 block"
             >
-              Boutique Attire
+              Trimmer Attire
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -77,7 +77,7 @@ export default function FeaturedThreePiece() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight"
             >
-              Featured Three-Piece Collection
+              Featured Trimmer Collection
             </motion.h2>
           </div>
 
@@ -88,13 +88,13 @@ export default function FeaturedThreePiece() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-muted-foreground max-w-md text-sm sm:text-base"
           >
-            Explore handcrafted embroidery, premium fabrics, and elegant traditional attire designed for style and comfort.
+            Explore trimmer, premium , and elegant traditional attire designed for hair and beard style and comfort.
           </motion.p>
         </div>
 
         {/* Loading Skeleton */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
@@ -111,7 +111,7 @@ export default function FeaturedThreePiece() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
           >
             {products.map((product) => (
               <motion.div key={product._id || product.id} variants={itemVariants} className="h-full">
@@ -136,7 +136,7 @@ export default function FeaturedThreePiece() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-14 flex justify-center"
         >
-          <Link href="/3-pcs">
+          <Link href="/electronicsandgadgets/trimmer">
             <motion.div
               whileHover="hover"
               whileTap="tap"
