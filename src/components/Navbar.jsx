@@ -65,6 +65,13 @@ const navItems = [
         href: "/electronicsandgadgets/kids-learnings",
         icon: FiGift,
       },
+      {
+        key: "trimmer",
+        title: "Trimmers",
+        description: "Precision trimmers and shavers",
+        href: "/electronicsandgadgets/trimmer",
+        icon: FiGift,
+      },
     ],
   },
   {
