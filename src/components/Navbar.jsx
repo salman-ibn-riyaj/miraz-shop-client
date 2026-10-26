@@ -25,6 +25,8 @@ import {
   FiPackage,
   FiSmile,
   FiGift,
+  FiHeadphones,
+  FiCreditCard,
 } from "react-icons/fi";
 import Link from "next/link";
 import { ThemeSwitch } from "./ThemeSwitch";
@@ -41,6 +43,7 @@ const navItems = [
   {
     key: "electronics-gadgets",
     label: "Electronics & Gadgets",
+    header: "Watches & Timepieces",
     icon: FiGrid,
     type: "dropdown",
     children: [
@@ -89,6 +92,22 @@ const navItems = [
     type: "link",
   },
   {
+    key: "accessories",
+    label: "Accessories",
+    header: "Accessories Collection",
+    icon: FiHeadphones,
+    type: "dropdown",
+    children: [
+      {
+        key: "wallets",
+        title: "Wallets",
+        description: "Leather wallets & card holders",
+        href: "/accessories/wallets",
+        icon: FiCreditCard,
+      },
+    ],
+  },
+  {
     key: "add Products",
     label: "Add Products",
     href: "/add-product",
@@ -100,7 +119,7 @@ const navItems = [
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState({});
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const triggerRef = useRef(null);
@@ -159,16 +178,21 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-6">
           {navItems.map((item) => {
             if (item.type === "dropdown") {
+              const isThisOpen = openDropdown === item.key;
               return (
-                <Dropdown key={item.key} isOpen={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+                <Dropdown
+                  key={item.key}
+                  isOpen={isThisOpen}
+                  onOpenChange={(open) => setOpenDropdown(open ? item.key : null)}
+                >
                   <Dropdown.Trigger>
                     <div
                       ref={triggerRef}
                       className="flex items-center gap-1.5 text-sm font-semibold text-foreground hover:text-primary transition-colors cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-default-100"
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      onClick={() => setOpenDropdown(isThisOpen ? null : item.key)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
-                          setIsDropdownOpen(!isDropdownOpen);
+                          setOpenDropdown(isThisOpen ? null : item.key);
                         }
                       }}
                       role="button"
@@ -176,7 +200,7 @@ export default function Navbar() {
                     >
                       <span>{item.label}</span>
                       <motion.div
-                        animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                        animate={{ rotate: isThisOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
                         <FiChevronDown className="h-4 w-4" />
@@ -191,7 +215,7 @@ export default function Navbar() {
                     >
                       <Dropdown.Section>
                         <Header className="px-2 py-1.5 text-xs font-semibold text-default-400 uppercase tracking-wider">
-                          Watches & Timepieces
+                          {item.header ?? item.label}
                         </Header>
                         {item.children?.map((child) => (
                           <Dropdown.Item
@@ -240,31 +264,6 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {mounted ? (
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-              {/* <Button
-                isIconOnly
-                variant="flat"
-                color="default"
-                aria-label="Toggle theme"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="rounded-full"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={theme}
-                    initial={{ y: -20, opacity: 0, rotate: -90 }}
-                    animate={{ y: 0, opacity: 1, rotate: 0 }}
-                    exit={{ y: 20, opacity: 0, rotate: 90 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {theme === "dark" ? (
-                      <FiSun className="h-5 w-5 text-warning" />
-                    ) : (
-                      <FiMoon className="h-5 w-5 text-default-600" />
-                    )}
-                    
-                  </motion.div>
-                </AnimatePresence>
-              </Button> */}
               <ThemeSwitch />
             </motion.div>
           ) : (

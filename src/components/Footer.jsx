@@ -91,7 +91,7 @@ export default function Footer() {
                 </div>
                 <div className="flex items-center gap-2">
                   <FiPhone className="text-primary" />
-                  <span>+880 1575578198</span>
+                  <span>+88 01950186930</span>
                 </div>
               </div>
             </div>
