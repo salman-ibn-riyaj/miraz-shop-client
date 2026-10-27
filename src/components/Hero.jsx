@@ -1,20 +1,28 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import NextLink from "next/link";
+import Image from "next/image";
 import { Button, Chip } from "@heroui/react";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   FiShoppingBag,
   FiArrowRight,
   FiHeart,
   FiStar,
   FiWatch,
-  FiGrid,
-  FiCheckCircle,
   FiLayers,
 } from "react-icons/fi";
-import Link from "next/link";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const categories = [
@@ -23,22 +31,100 @@ export default function Hero() {
     { icon: FiWatch, text: "Luxury Watches & Ornaments" },
   ];
 
+  const reduceMotion = useReducedMotion();
+
+  // ---------- refs ----------
+  const sectionRef = useRef(null);
+  const frameRef = useRef(null); // image frame (GSAP shine + glow)
+  const parallaxRef = useRef(null); // inner layer (GSAP scroll parallax)
+  const shineRef = useRef(null);
+  const glowRef = useRef(null);
+
+  // ---------- Framer Motion: 3D tilt ----------
+  const mx = useMotionValue(0); // -0.5 .. 0.5
+  const my = useMotionValue(0);
+  const springCfg = { stiffness: 150, damping: 18, mass: 0.4 };
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), springCfg);
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [6, -6]), springCfg);
+
+  const handleMouseMove = (e) => {
+    if (reduceMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    mx.set((e.clientX - rect.left) / rect.width - 0.5);
+    my.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const handleMouseLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
+  // ---------- GSAP: scroll parallax + shine sweep + glow pulse ----------
+  useEffect(() => {
+    if (reduceMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Scroll parallax (Lenis এর সাথে ScrollTrigger sync থাকলে আরও smooth হবে)
+      gsap.fromTo(
+        parallaxRef.current,
+        { yPercent: -5, scale: 1.12 },
+        {
+          yPercent: 5,
+          scale: 1.12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+
+      // Shine sweep — প্রতি কয়েক সেকেন্ডে একবার
+      gsap.fromTo(
+        shineRef.current,
+        { xPercent: -150 },
+        {
+          xPercent: 250,
+          duration: 1.6,
+          ease: "power2.inOut",
+          repeat: -1,
+          repeatDelay: 3.5,
+          delay: 1.2,
+        }
+      );
+
+      // Glow pulse
+      gsap.to(glowRef.current, {
+        opacity: 0.9,
+        scale: 1.08,
+        duration: 2.4,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [reduceMotion]);
+
   return (
-    <section className="relative overflow-hidden bg-background py-12 md:py-20 text-foreground transition-colors duration-200">
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-background py-12 md:py-20 text-foreground transition-colors duration-200"
+    >
       {/* Background Glow Highlights */}
       <div className="pointer-events-none absolute -top-24 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 left-0 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-
-        {/* Left Column: Heading & Call to Actions */}
+        {/* Left Column */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="lg:col-span-7 space-y-6 text-center lg:text-left"
+          className="lg:col-span-5 space-y-6 text-center lg:text-left"
         >
-          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -56,64 +142,92 @@ export default function Hero() {
             </Chip>
           </motion.div>
 
-          {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight"
+            className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight"
           >
             Elegance & Style Redefined at{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-bold">
-              Miraz Shop
+              Miraj Shop
             </span>
           </motion.h1>
 
-          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
             className="text-default-500 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed"
           >
-            Discover exquisite 3-piece designer wear, premium beauty care products, elegant ornaments, and timeless watches crafted to match your distinct beauty and lifestyle.
+            Discover exquisite 3-piece designer wear, premium beauty care
+            products, elegant ornaments, and timeless watches crafted to match
+            your distinct beauty and lifestyle.
           </motion.p>
 
-          {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
             className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
           >
-            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-              <Link
-                href="/3-pcs"
-                color="primary"
-                variant="solid"
-                size="lg"
-                startcontent={<FiShoppingBag className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110" />}
-                className="group relative overflow-hidden font-semibold tracking-wide px-8 py-3.5 w-full sm:w-auto rounded-xl bg-gradient-to-r from-primary via-indigo-600 to-primary bg-[length:200%_auto] text-white shadow-lg shadow-primary/30 transition-all duration-300 ease-out hover:bg-[position:right_center] hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-98"
-              >
-                Explore Three-Piece
-              </Link>
-            </motion.div>
 
-            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-              <Link
-                href="/beauty-health"
-                variant="flat"
-                color="default"
-                size="lg"
-                startcontent={<FiHeart className="h-5 w-5 text-rose-500 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6" />}
-                className="group relative font-semibold tracking-wide px-8 py-3.5 w-full sm:w-auto rounded-xl bg-background/60 backdrop-blur-md border border-default-200 hover:border-rose-200 dark:hover:border-rose-900 text-foreground hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-98"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
+            >
+              {/* Explore Watches */}
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto"
               >
-                Beauty & Health
-              </Link>
+                <NextLink
+                  href="/electronicsandgadgets/watches/menswatch"
+                  className="group relative flex w-full sm:w-auto items-center justify-center gap-2.5 overflow-hidden rounded-xl px-8 py-3.5 font-semibold tracking-wide text-white
+        bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 bg-[length:200%_auto]
+        shadow-lg shadow-orange-500/40 dark:shadow-orange-500/30
+        ring-1 ring-white/20
+        transition-all duration-500 ease-out
+        hover:bg-[position:right_center] hover:shadow-xl hover:shadow-orange-500/60"
+                >
+                  {/* Shine sweep */}
+                  <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full transition-transform duration-700 ease-out group-hover:translate-x-[450%]" />
+
+                  <FiWatch className="relative h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+                  <span className="relative">Explore Watches</span>
+                  <FiArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+                </NextLink>
+              </motion.div>
+
+              {/* Explore Wallets */}
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto"
+              >
+                <NextLink
+                  href="/accessories/wallets"
+                  className="group relative flex w-full sm:w-auto items-center justify-center gap-2.5 overflow-hidden rounded-xl px-8 py-3.5 font-semibold tracking-wide text-white
+        bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-[length:200%_auto]
+        shadow-lg shadow-teal-500/40 dark:shadow-teal-500/30
+        ring-1 ring-white/20
+        transition-all duration-500 ease-out
+        hover:bg-[position:right_center] hover:shadow-xl hover:shadow-teal-500/60"
+                >
+                  {/* Shine sweep */}
+                  <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full transition-transform duration-700 ease-out group-hover:translate-x-[450%]" />
+
+                  <FiShoppingBag className="relative h-5 w-5 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />
+                  <span className="relative">Explore Wallets</span>
+                  <FiArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+                </NextLink>
+              </motion.div>
             </motion.div>
           </motion.div>
 
-          {/* Category Highlights */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -133,51 +247,81 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* Right Column: Visual Feature Showcase */}
+        {/* Right Column: Banner Image */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="lg:col-span-5 relative flex justify-center"
+          initial={{ opacity: 0, scale: 0.92, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="lg:col-span-7 relative"
+          style={{ perspective: 1200 }}
         >
-          {/* Card Showcase Container */}
-          <div className="relative w-full max-w-md aspect-square rounded-3xl bg-gradient-to-tr from-primary/20 via-content2 to-content1 border border-default-200 p-6 flex flex-col justify-between shadow-2xl overflow-hidden group">
+          {/* GSAP glow behind the image */}
+          <div
+            ref={glowRef}
+            className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-gradient-to-tr from-primary/40 via-amber-400/20 to-cyan-400/30 opacity-60 blur-2xl"
+          />
 
-            {/* Top Product Tag */}
-            <div className="flex justify-between items-center z-10">
-              <span className="text-xs font-bold tracking-wider text-default-400 uppercase">
-                Trending Arrival
-              </span>
-              <Chip color="warning" size="sm" variant="flat" className="font-bold">
-                NEW SEASON
-              </Chip>
+          {/* Framer Motion 3D tilt */}
+          <motion.div
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              rotateX: reduceMotion ? 0 : rotateX,
+              rotateY: reduceMotion ? 0 : rotateY,
+              transformStyle: "preserve-3d",
+            }}
+            className="relative"
+          >
+            <div
+              ref={frameRef}
+              className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-default-200 shadow-2xl"
+            >
+              {/* GSAP parallax layer */}
+              <div ref={parallaxRef} className="absolute inset-0 will-change-transform">
+                <Image
+                  src="/miraj-shop-banner.webp"
+                  alt="Miraj Shop - Premium Lifestyle: watches, wallets, trimmers, three-piece, kids book"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+
+              {/* GSAP shine sweep */}
+              <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div
+                  ref={shineRef}
+                  className="absolute top-0 left-0 h-full w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                />
+              </div>
             </div>
 
-            {/* Central Graphic Element */}
-            <div className="relative my-auto flex flex-col items-center justify-center text-center z-10 py-6">
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                className="w-28 h-28 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shadow-xl mb-4"
-              >
-                <FiWatch className="w-14 h-14" />
-              </motion.div>
-              <h3 className="text-xl font-extrabold text-foreground">
-                Ornaments & Luxury Watches
-              </h3>
-              <p className="text-xs text-default-500 max-w-xs mt-1">
-                Handcrafted ornaments and luxury timepieces designed for every special occasion.
-              </p>
-            </div>
-
-            {/* Floating Quick Action Card */}
+            {/* Floating badge — top right */}
             <motion.div
-              whileHover={{ y: -4 }}
-              className="z-10 bg-background/90 backdrop-blur-md p-4 rounded-xl border border-default-200 flex items-center justify-between shadow-md"
+              animate={reduceMotion ? {} : { y: [0, -8, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transform: "translateZ(50px)" }}
+              className="absolute -top-4 -right-2 sm:-right-4"
+            >
+              <Chip color="warning" variant="shadow" className="font-bold">
+                EID COLLECTION
+              </Chip>
+            </motion.div>
+
+            {/* Floating offer card — bottom left */}
+            <motion.div
+              animate={reduceMotion ? {} : { y: [0, 8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              whileHover={{ scale: 1.04 }}
+              style={{ transform: "translateZ(70px)" }}
+              className="absolute -bottom-5 left-4 sm:left-6 bg-background/90 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-default-200 flex items-center gap-4 shadow-xl"
             >
               <div>
                 <p className="text-xs text-default-400">Exclusive Offers</p>
-                <p className="text-base font-extrabold text-primary">Up to 40% OFF</p>
+                <p className="text-base font-extrabold text-primary">
+                  Up to 40% OFF
+                </p>
               </div>
               <Button
                 as={NextLink}
@@ -185,16 +329,14 @@ export default function Hero() {
                 size="sm"
                 color="primary"
                 variant="flat"
-                startcontent={<FiArrowRight className="h-4 w-4" />}
+                endContent={<FiArrowRight className="h-4 w-4" />}
                 className="font-bold"
               >
                 Shop Collection
               </Button>
             </motion.div>
-
-          </div>
+          </motion.div>
         </motion.div>
-
       </div>
     </section>
   );

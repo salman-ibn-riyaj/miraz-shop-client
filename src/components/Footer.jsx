@@ -15,6 +15,8 @@ import {
   FiMapPin,
   FiPhone,
 } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
+import { BsWhatsapp } from "react-icons/bs";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -50,10 +52,8 @@ export default function Footer() {
   ];
 
   const socialLinks = [
-    { icon: FiGithub, href: "https://github.com", label: "GitHub" },
-    { icon: FiTwitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: FiInstagram, href: "https://instagram.com", label: "Instagram" },
-    { icon: FiLinkedin, href: "https://linkedin.com", label: "LinkedIn" },
+    { icon: BsWhatsapp, href: "https://wa.me/8801950186930?utm_source=chatgpt.com", label: "WhatsApp" },
+    
   ];
 
   return (
