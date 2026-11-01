@@ -32,7 +32,11 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} light h-full antialiased`}
     >
       <body className="bg-background text-foreground min-h-screen flex flex-col">
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-center" toastOptions={{
+              duration: 2000,
+              success: { duration: 1500 },
+                error: { duration: 2500 },
+        }} reverseOrder={false} />
         <Providers>
           <Navbar />
           <main className="flex-grow">{children}</main>

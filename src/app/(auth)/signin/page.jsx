@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import toast, { Toaster } from "react-hot-toast";
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { FiArrowRight } from "react-icons/fi";
 import { authClient } from "@/lib/auth-client"; // Better Auth client instance
+import { toast } from "react-hot-toast";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -37,11 +37,15 @@ export default function SignInPage() {
       });
 
       if (error) {
-        toast.error(error.message || "Invalid email or password");
-      } else {
-        toast.success("Welcome back! Signing in...");
-        router.push("/");
-      }
+  toast.error(error.message || "Invalid email or password", {
+    duration: 2000,
+  });
+} else {
+  toast.success("Welcome back! Signing in...", {
+    duration: 1500,
+  });
+  router.push("/");
+}
     } catch (err) {
       toast.error("An unexpected error occurred. Please try again.");
     } finally {
