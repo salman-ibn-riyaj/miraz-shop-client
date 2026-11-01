@@ -8,6 +8,7 @@ import CosmeticsForm from "./CosmeticsForm";
 import KidsLearningForm from "./KidsLearningForm";
 import TrimmerForm from "./TrimmerForm";
 import WalletsForm from "./WalletsForm";
+import BraceletsForm from "./BraceletsForm";
 
 export default function CategorySelector() {
   const [selectedCategory, setSelectedCategory] = useState("mens-watch");
@@ -30,6 +31,7 @@ export default function CategorySelector() {
           <option value="kids-learning">Kids Learning</option>
           <option value="trimmer">Trimmers</option>
           <option value="wallets">Wallets</option>
+          <option value="bracelets">Bracelets</option>
         </select>
       </div>
 
@@ -41,6 +43,7 @@ export default function CategorySelector() {
         {selectedCategory === "kids-learning" && <KidsLearningForm />}
         {selectedCategory === "trimmer" && <TrimmerForm />}
         {selectedCategory === "wallets" && <WalletsForm />}
+        {selectedCategory === "bracelets" && <BraceletsForm/>}
       </div>
     </>
   );

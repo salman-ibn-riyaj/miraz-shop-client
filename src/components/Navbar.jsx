@@ -27,6 +27,7 @@ import {
   FiGift,
   FiHeadphones,
   FiCreditCard,
+  FiLink,
 } from "react-icons/fi";
 import Link from "next/link";
 import { ThemeSwitch } from "./ThemeSwitch";
@@ -105,7 +106,14 @@ const navItems = [
         href: "/accessories/wallets",
         icon: FiCreditCard,
       },
-    ],
+     {
+        key: "bracelet",
+        title: "Bracelet",
+        description: "Stylish bracelets, chains & wristbands",
+        href: "/accessories/bracelet",
+        icon: FiLink,
+      },
+    ]
   },
   {
     key: "add Products",
