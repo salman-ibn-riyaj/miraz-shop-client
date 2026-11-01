@@ -368,8 +368,7 @@ export default function Navbar() {
               })}
 
               <div className="pt-3 border-t border-default-200">
-                <Button
-                  as={NextLink}
+                <Link
                   href="/signin"
                   variant="flat"
                   color="default"
@@ -378,7 +377,7 @@ export default function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign In
-                </Button>
+                </Link>
               </div>
             </div>
           </motion.div>
