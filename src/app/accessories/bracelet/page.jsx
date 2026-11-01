@@ -21,7 +21,7 @@ async function getProductsByCollection(collectionName) {
 
 const BraceletPage = async () => {
   // আপনার MongoDB কালেকশনের নাম এখানে পাঠাবেন (যেমন: "bracelet")
-  const products = await getProductsByCollection("bracelet");
+  const products = await getProductsByCollection("bracelets");
 
   return (
     <main className="min-h-screen bg-slate-50/50 py-10 md:py-16">
