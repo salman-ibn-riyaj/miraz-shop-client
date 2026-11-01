@@ -55,7 +55,7 @@ export default function SignInPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-12 text-slate-100">
-      <Toaster position="top-right" />
+
 
       {/* Dynamic Background Glowing Orbs */}
       <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-indigo-600/30 blur-[128px]" />
