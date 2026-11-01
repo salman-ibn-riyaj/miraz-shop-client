@@ -11,7 +11,7 @@ const OrderForm = ({ product }) => {
   const [deliveryArea, setDeliveryArea] = useState("inside"); // 'inside' or 'outside'
 
   const unitPrice = product?.price || 0;
-  const deliveryCharge = deliveryArea === "inside" ? 60 : 120;
+  const deliveryCharge = deliveryArea === "inside" ? 80 : 120;
   const subTotal = unitPrice * quantity;
   const grandTotal = subTotal + deliveryCharge;
 
@@ -131,7 +131,7 @@ const OrderForm = ({ product }) => {
               />
               <span className="text-xs sm:text-sm">Inside Dhaka</span>
             </div>
-            <span className="text-xs font-bold">৳60</span>
+            <span className="text-xs font-bold">৳80</span>
           </label>
 
           <label
