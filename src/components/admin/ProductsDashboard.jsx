@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { AlertDialog } from "@heroui/react/alert-dialog";
 import { useEffect, useState } from "react";
 import { FiEdit2, FiSearch, FiTrash2 } from "react-icons/fi";
 
@@ -28,6 +29,8 @@ export default function ProductsDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [productToDelete, setProductToDelete] = useState(null);
+  const [deletePending, setDeletePending] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const pageSize = 20;
 
@@ -84,8 +87,9 @@ export default function ProductsDashboard() {
   };
 
   const removeProduct = async (product) => {
-    if (!window.confirm(`Permanently delete "${product.title}"?`)) return;
+    if (!product || deletePending) return;
     setNotice("");
+    setDeletePending(true);
     setLoading(true);
     setError("");
     try {
@@ -93,9 +97,13 @@ export default function ProductsDashboard() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Could not delete product");
       setNotice("Product deleted.");
+      setProductToDelete(null);
       setRefresh((value) => value + 1);
     } catch (requestError) {
       setError(requestError.message);
+      setLoading(false);
+    } finally {
+      setDeletePending(false);
     }
   };
 
@@ -148,7 +156,7 @@ export default function ProductsDashboard() {
         <span aria-live="polite">{notice}</span>
       </div>
 
-      {error && <p role="alert" className="mb-4 rounded-md border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">{error}</p>}
+      {error && !productToDelete && <p role="alert" className="mb-4 rounded-md border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">{error}</p>}
 
       <div className="overflow-x-auto border-y border-default-200">
         <table className="w-full min-w-[760px] border-collapse text-left text-sm">
@@ -194,7 +202,10 @@ export default function ProductsDashboard() {
                     ><FiEdit2 aria-hidden="true" /></Link>
                     <button
                       type="button"
-                      onClick={() => removeProduct(product)}
+                      onClick={() => {
+                        setError("");
+                        setProductToDelete(product);
+                      }}
                       aria-label={`Delete ${product.title}`}
                       title="Delete product"
                       className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-danger/40 text-danger hover:bg-danger/5"
@@ -214,6 +225,52 @@ export default function ProductsDashboard() {
           <button type="button" disabled={page >= pageCount || loading} onClick={() => changePage(page + 1)} className="rounded-md border border-default-300 px-3 py-2 disabled:opacity-40">Next</button>
         </div>
       </div>
+
+      <AlertDialog
+        isOpen={Boolean(productToDelete)}
+        onOpenChange={(isOpen) => {
+          if (!isOpen && !deletePending) setProductToDelete(null);
+        }}
+      >
+        <AlertDialog.Backdrop
+          isDismissable={!deletePending}
+          isKeyboardDismissDisabled={deletePending}
+        >
+          <AlertDialog.Container size="sm">
+            <AlertDialog.Dialog>
+              <AlertDialog.Header>
+                <AlertDialog.Icon />
+                <AlertDialog.Heading>Delete this product?</AlertDialog.Heading>
+              </AlertDialog.Header>
+              <AlertDialog.Body>
+                <p>
+                  Permanently delete <span className="font-semibold text-foreground">{productToDelete?.title || "this product"}</span>?
+                  This action cannot be undone.
+                </p>
+                {error && <p role="alert" className="mt-3 rounded-md border border-danger/30 bg-danger/5 px-3 py-2 text-sm text-danger">{error}</p>}
+              </AlertDialog.Body>
+              <AlertDialog.Footer>
+                <button
+                  type="button"
+                  disabled={deletePending}
+                  onClick={() => setProductToDelete(null)}
+                  className="rounded-md border border-default-300 px-4 py-2 text-sm font-medium hover:bg-default-100 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={deletePending}
+                  onClick={() => removeProduct(productToDelete)}
+                  className="rounded-md bg-danger px-4 py-2 text-sm font-semibold text-danger-foreground hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {deletePending ? "Deleting..." : "Delete product"}
+                </button>
+              </AlertDialog.Footer>
+            </AlertDialog.Dialog>
+          </AlertDialog.Container>
+        </AlertDialog.Backdrop>
+      </AlertDialog>
     </section>
   );
 }
