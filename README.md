@@ -28,6 +28,18 @@ development and in your deployment environment for production. The Pixel tracks
 pages, and `Purchase` after an order is successfully submitted. Purchase values
 use BDT and include the order total.
 
+## Admin Product Management
+
+Configure `ADMIN_API_SECRET` to the same random value of at least 32 characters in the client and server deployment environments. The server verifies signed requests from the Next.js admin proxy; do not expose this secret with a `NEXT_PUBLIC_` prefix. Also configure `NEXT_PUBLIC_API_URL` on the client to the Express server URL.
+
+After the account `mirazhanootshop@gmail.com` exists, run the server's one-time promotion command from a trusted environment with `MONGODB_URI` set:
+
+```bash
+npm run promote-admin -- mirazhanootshop@gmail.com
+```
+
+The dashboard is available at `/admin/products`. New public signups receive the regular `user` role and cannot set their own role.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

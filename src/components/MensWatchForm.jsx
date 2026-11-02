@@ -49,8 +49,7 @@ const handleSubmit = async (e) => {
       };
 
       // Step 3: API Request
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const res = await fetch(`${baseUrl}/api/products/mens-watch`, {
+      const res = await fetch("/api/admin/products/mens-watch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
@@ -62,7 +61,7 @@ const handleSubmit = async (e) => {
         
         // Timeout দিয়ে রিডিরেক্ট নিশ্চায়ন
         setTimeout(() => {
-          router.push("/electronicsandgadgets/watches/menswatch");
+          router.push("/admin/products");
           router.refresh();
         }, 300);
       } else {
@@ -79,10 +78,10 @@ const handleSubmit = async (e) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <h3 className="text-lg font-bold">Men's Watch Details</h3>
+      <h3 className="text-lg font-bold">Men&apos;s Watch Details</h3>
       {success && (
         <div className="p-3 bg-success/10 text-success rounded-lg flex items-center gap-2">
-          <FiCheckCircle /> Added to Men's Watch Collection!
+          <FiCheckCircle /> Added to Men&apos;s Watch Collection!
         </div>
       )}
 

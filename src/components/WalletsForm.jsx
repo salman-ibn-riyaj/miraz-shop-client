@@ -50,9 +50,7 @@ export default function WalletsForm() {
             };
 
             // Step 3: Save to Database API
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-            const res = await fetch(`${baseUrl}/api/products/wallets`, {
+            const res = await fetch("/api/admin/products/wallets", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(productData),
@@ -64,7 +62,7 @@ export default function WalletsForm() {
 
                 // সাফল্যের পর ওয়ালেট পেজে রিডিরেক্ট
                 setTimeout(() => {
-                    router.push("/accessories/wallets");
+                    router.push("/admin/products");
                     router.refresh();
                 }, 300);
             } else {

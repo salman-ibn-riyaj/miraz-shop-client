@@ -62,8 +62,7 @@ export default function TrimmerForm() {
       };
 
       // Step 3: Save to Database API
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const res = await fetch(`${baseUrl}/api/products/trimmer`, {
+      const res = await fetch("/api/admin/products/trimmer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
@@ -72,7 +71,7 @@ export default function TrimmerForm() {
       if (res.ok) {
         setSuccess(true);
         form.reset();
-        router.push("/electronicsandgadgets/trimmer");
+        router.push("/admin/products");
       } else {
         alert("Failed to save product!");
       }

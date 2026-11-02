@@ -52,8 +52,7 @@ export default function KidsLearningForm() {
       };
 
       // Step 3: Save to Database API
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const res = await fetch(`${baseUrl}/api/products/kids-learning`, {
+      const res = await fetch("/api/admin/products/kids-learning", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
@@ -62,7 +61,7 @@ export default function KidsLearningForm() {
       if (res.ok) {
         setSuccess(true);
         form.reset();
-        router.push("/kids-learning");
+        router.push("/admin/products");
       } else {
         alert("Failed to save product!");
       }

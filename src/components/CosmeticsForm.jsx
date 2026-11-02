@@ -1,10 +1,11 @@
 "use client";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
 
 export default function CosmeticsForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -47,8 +48,7 @@ export default function CosmeticsForm() {
       };
 
       // Step 3: Save to Database API
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const res = await fetch(`${baseUrl}/api/products/cosmetics`, {
+      const res = await fetch("/api/admin/products/cosmetics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
@@ -57,7 +57,7 @@ export default function CosmeticsForm() {
       if (res.ok) {
         setSuccess(true);
         form.reset();
-        redirect("/beauty-health"); // সাফল্যের পর বিউটি অ্যান্ড হেলথ পেজে রিডিরেক্ট
+        router.push("/admin/products");
       }
     } catch (err) {
       console.error(err);

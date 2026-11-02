@@ -24,8 +24,8 @@ export default function CategorySelector() {
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="w-full p-3 border border-default-300 rounded-xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          <option value="mens-watch">Men's Watch</option>
-          <option value="womens-watch">Women's Watch</option>
+          <option value="mens-watch">Men&apos;s Watch</option>
+          <option value="womens-watch">Women&apos;s Watch</option>
           <option value="three-piece">3-Piece Dress</option>
           <option value="cosmetics">Cosmetics & Beauty</option>
           <option value="kids-learning">Kids Learning</option>

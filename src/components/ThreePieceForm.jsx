@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FiCheckCircle } from "react-icons/fi";
 
 export default function ThreePieceForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -46,8 +48,7 @@ export default function ThreePieceForm() {
       };
 
       // Step 3: Save to Database API
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const res = await fetch(`${baseUrl}/api/products/three-piece`, {
+      const res = await fetch("/api/admin/products/three-piece", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
@@ -56,7 +57,7 @@ export default function ThreePieceForm() {
       if (res.ok) {
         setSuccess(true);
         form.reset();
-        redirect("/3-pcs"); // সাফল্যের পর 3-Piece Collection পেজে রিডিরেক্ট
+        router.push("/admin/products");
       }
     } catch (err) {
       console.error(err);

@@ -48,9 +48,7 @@ export default function WomensWatchForm() {
             };
 
             // Step 3: Save to Database API
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-            const res = await fetch(`${baseUrl}/api/products/womens-watch`, {
+            const res = await fetch("/api/admin/products/womens-watch", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(productData),
@@ -62,7 +60,7 @@ export default function WomensWatchForm() {
 
                 // সাফল্যের পর উইমেন্স ওয়াচ পেজে রিডিরেক্ট
                 setTimeout(() => {
-                    router.push("/electronicsandgadgets/watches/womenswatch");
+                    router.push("/admin/products");
                     router.refresh();
                 }, 300);
             } else {
@@ -78,10 +76,10 @@ export default function WomensWatchForm() {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <h3 className="text-lg font-bold">Women's Watch Details</h3>
+            <h3 className="text-lg font-bold">Women&apos;s Watch Details</h3>
             {success && (
                 <div className="p-3 bg-success/10 text-success rounded-lg flex items-center gap-2">
-                    <FiCheckCircle /> Added to Women's Watch Collection!
+                    <FiCheckCircle /> Added to Women&apos;s Watch Collection!
                 </div>
             )}
 

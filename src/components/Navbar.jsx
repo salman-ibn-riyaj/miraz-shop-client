@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { Dropdown, Label, Description, Header } from "@heroui/react";
@@ -110,13 +110,6 @@ const navItems = [
       },
     ],
   },
-  {
-    key: "add-products",
-    label: "Add Products",
-    href: "/add-product",
-    icon: FiGift,
-    type: "link",
-  },
 ];
 
 // Reusable button styles (সব button এক size-এ থাকবে, text ভাঙবে না)
@@ -126,22 +119,25 @@ const primaryBtn =
 const dangerBtn =
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-red-700 hover:shadow-md hover:shadow-red-500/20 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-60 dark:focus:ring-offset-gray-900";
 
+const subscribeToHydration = () => () => {};
+const getHydratedSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export default function Navbar() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState({});
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(subscribeToHydration, getHydratedSnapshot, getServerSnapshot);
   const [signingOut, setSigningOut] = useState(false);
 
   // Better Auth session
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
-  const displayName = user?.name || user?.email || "Admin";
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const displayName = user?.name || user?.email || "Account";
+  const visibleNavItems = user?.role === "admin"
+    ? [...navItems, { key: "admin", label: "Admin", href: "/admin/products", icon: FiGrid, type: "link" }]
+    : navItems;
 
   // Screen বড় হলে mobile menu নিজে থেকে বন্ধ হবে
   useEffect(() => {
@@ -221,7 +217,7 @@ export default function Navbar() {
 
         {/* Center Section: Desktop Navigation (xl থেকে দেখাবে) */}
         <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 xl:flex">
-          {navItems.map((item) => {
+          {visibleNavItems.map((item) => {
             if (item.type === "dropdown") {
               const isThisOpen = openDropdown === item.key;
               return (
@@ -317,7 +313,7 @@ export default function Navbar() {
             <div className="hidden h-10 w-28 animate-pulse rounded-xl bg-default-100 md:block" />
           ) : user ? (
             <>
-              {/* Admin name */}
+              {/* Account name */}
               <div className="hidden items-center gap-2 whitespace-nowrap rounded-xl border border-default-200 bg-default-100/60 px-3 py-2 text-sm font-semibold text-foreground md:flex">
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-600/15 text-indigo-600">
                   <FiUser className="h-3.5 w-3.5" />
@@ -378,7 +374,7 @@ export default function Navbar() {
           >
             {/* বেশি item হলে menu scroll করা যাবে */}
             <div className="flex max-h-[calc(100vh-4rem)] flex-col gap-3 overflow-y-auto p-4">
-              {navItems.map((item) => {
+              {visibleNavItems.map((item) => {
                 const Icon = item.icon;
                 if (item.type === "dropdown") {
                   const isOpen = !!openMobileDropdown[item.key];

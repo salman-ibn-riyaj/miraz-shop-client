@@ -15,7 +15,6 @@ export default function AdminSignupPage() {
         email: "",
         password: "",
         confirmPassword: "",
-        role: "admin", // এক মাত্র রোল 'admin'
     });
 
     const [showPassword, setShowPassword] = useState(false);
@@ -40,29 +39,17 @@ export default function AdminSignupPage() {
         setLoading(true);
 
         try {
-            // ১. আগে চেক করা হচ্ছে Admin ইতোমধ্যে রয়েছে কি না
-            const res = await fetch("/api/auth/check-admin");
-            const data = await res.json();
-
-            if (data.exists) {
-                toast.error("admin already exist");
-                setLoading(false);
-                return;
-            }
-
-            // ২. Admin না থাকলে Better Auth দিয়ে সাইনআপ সম্পন্ন হবে
             const { data: authData, error } = await authClient.signUp.email({
                 email: formData.email,
                 password: formData.password,
                 name: formData.name,
-                role: formData.role, // role: "admin" পাস হচ্ছে
             });
 
             if (error) {
-                toast.error(error.message || "Failed to create admin account");
+                toast.error(error.message || "Failed to create account");
             } else {
-                toast.success("Admin account created successfully!");
-                router.push("/dashboard");
+                toast.success("Account created successfully!");
+                router.push("/");
             }
         } catch (err) {
             toast.error("An unexpected error occurred");
@@ -77,10 +64,10 @@ export default function AdminSignupPage() {
             <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800">
                 <div>
                     <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-                        Admin Registration
+                        Create Account
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-                        One-time signup for system administrator
+                        Sign up to continue shopping
                     </p>
                 </div>
 
@@ -114,20 +101,6 @@ export default function AdminSignupPage() {
                             value={formData.email}
                             onChange={handleChange}
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                        />
-                    </div>
-
-                    {/* Role Field */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Role
-                        </label>
-                        <input
-                            type="text"
-                            name="role"
-                            value={formData.role}
-                            readOnly
-                            className="mt-1 block w-full capitalize cursor-not-allowed rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-gray-600 dark:border-gray-600 dark:bg-gray-600 dark:text-gray-300"
                         />
                     </div>
 
@@ -195,7 +168,7 @@ export default function AdminSignupPage() {
                         disabled={loading}
                         className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
                     >
-                        {loading ? "Registering..." : "Sign Up as Admin"}
+                        {loading ? "Registering..." : "Sign Up"}
                     </button>
                 </form>
 

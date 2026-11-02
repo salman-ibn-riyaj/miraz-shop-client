@@ -50,8 +50,7 @@ export default function BraceletForm() {
       };
 
       // Step 3: API Request
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const res = await fetch(`${baseUrl}/api/products/bracelets`, {
+      const res = await fetch("/api/admin/products/bracelets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
@@ -63,7 +62,7 @@ export default function BraceletForm() {
 
         // Timeout দিয়ে রিডিরেক্ট নিশ্চিত করা
         setTimeout(() => {
-          router.push("/accessories/bracelet");
+          router.push("/admin/products");
           router.refresh();
         }, 300);
       } else {
